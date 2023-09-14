@@ -1,2 +1,7 @@
-# projeto_softex
-Repositório de projeto da Softex
+# Projeto do FAP/Softex
+### Colaboradores:
+- Daniel
+- Diogo
+- Everton
+- Lucas
+
