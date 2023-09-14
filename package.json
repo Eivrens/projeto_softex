@@ -1,0 +1,19 @@
+{
+    "name": "projeto1_softex",
+    "version": "1.0.0",
+    "description": "",
+    "main": "main.js",
+    "type": "module",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "start": "node main.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+      "clear": "^0.1.0",
+      "readline-sync": "^1.4.10",
+      "sqlite3": "^5.1.6"
+    }
+  }
