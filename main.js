@@ -1,5 +1,5 @@
-import readline from 'readline-sync';
-import clear from 'clear';
+import readline from "readline-sync";
+import clear from "clear";
 
 class Paciente {
   constructor(nome, cpf, idade, consulta) {
@@ -17,18 +17,23 @@ class Hospital {
 
   cadastrarPaciente() {
     const nome = readline.question("Digite o nome do paciente: ");
-    const cpf = readline.questionInt("Digite o CPF do paciente (somente números): ");
+    const cpf = readline.questionInt(
+      "Digite o CPF do paciente (somente números): "
+    );
     const idade = readline.questionInt("Digite a idade do paciente: ");
     const consulta = readline.question("Digite o tipo da consulta: ");
 
     const paciente = new Paciente(nome, cpf, idade, consulta);
     this.pacientes.push(paciente);
-    console.log("Paciente cadastrado com sucesso!");
   }
 
   buscarPaciente() {
-    const buscarCpf = readline.questionInt("Digite o CPF do paciente que deseja buscar (somente números): ");
-    const pacienteEncontrado = this.pacientes.find((paciente) => paciente.cpf === buscarCpf);
+    const buscarCpf = readline.questionInt(
+      "Digite o CPF do paciente que deseja buscar (somente números): "
+    );
+    const pacienteEncontrado = this.pacientes.find(
+      (paciente) => paciente.cpf === buscarCpf
+    );
 
     if (pacienteEncontrado) {
       console.log(`-- Paciente Encontrado --
@@ -43,8 +48,13 @@ class Hospital {
   }
 
   alterarPaciente() {
-    const buscarCpf = readline.questionInt("Digite o CPF do paciente que deseja alterar os dados (somente números): ");
-    const pacienteEncontrado = this.pacientes.find((paciente) => paciente.cpf === buscarCpf);
+    console.clear();
+    const buscarCpf = readline.questionInt(
+      "Digite o CPF do paciente que deseja alterar os dados (somente números): "
+    );
+    const pacienteEncontrado = this.pacientes.find(
+      (paciente) => paciente.cpf === buscarCpf
+    );
 
     if (pacienteEncontrado) {
       console.log(`-- Paciente Encontrado --
@@ -63,25 +73,37 @@ class Hospital {
         5. Sair
         `);
 
-        const selecionarOpcao = readline.questionInt("Digite o número da opção que deseja alterar: ");
+        const selecionarOpcao = readline.questionInt(
+          "Digite o número da opção que deseja alterar: "
+        );
+        console.clear();
         switch (selecionarOpcao) {
           case 1:
-            const novoNome = readline.question("Digite o novo nome do paciente: ");
+            const novoNome = readline.question(
+              "Digite o novo nome do paciente: "
+            );
             pacienteEncontrado.nome = novoNome;
+            console.clear();
             console.log("Nome do paciente alterado com sucesso!");
             break;
           case 2:
-            const novoCpf = readline.questionInt("Digite o novo CPF do paciente (somente números): ");
+            const novoCpf = readline.questionInt(
+              "Digite o novo CPF do paciente (somente números): "
+            );
             pacienteEncontrado.cpf = novoCpf;
             console.log("CPF do paciente alterado com sucesso!");
             break;
           case 3:
-            const novaIdade = readline.questionInt("Digite a nova idade do paciente: ");
+            const novaIdade = readline.questionInt(
+              "Digite a nova idade do paciente: "
+            );
             pacienteEncontrado.idade = novaIdade;
             console.log("Idade do paciente alterada com sucesso!");
             break;
           case 4:
-            const novaConsulta = readline.question("Digite a nova consulta do paciente: ");
+            const novaConsulta = readline.question(
+              "Digite a nova consulta do paciente: "
+            );
             pacienteEncontrado.consulta = novaConsulta;
             console.log("Consulta do paciente alterada com sucesso!");
             break;
@@ -98,8 +120,12 @@ class Hospital {
   }
 
   removerPaciente() {
-    const buscarCpf = readline.questionInt("Digite o CPF do paciente que deseja remover: (somente números) ");
-    const pacienteIndex = this.pacientes.findIndex((paciente) => paciente.cpf === buscarCpf);
+    const buscarCpf = readline.questionInt(
+      "Digite o CPF do paciente que deseja remover: (somente números) "
+    );
+    const pacienteIndex = this.pacientes.findIndex(
+      (paciente) => paciente.cpf === buscarCpf
+    );
 
     if (pacienteIndex !== -1) {
       const pacienteRemovido = this.pacientes.splice(pacienteIndex, 1);
@@ -125,6 +151,11 @@ class Hospital {
     }
   }
 
+  pausarLimpar() {
+    readline.keyInPause;
+    console.clear();
+  }
+
   iniciar() {
     while (true) {
       console.log(`--- Bem-vindo ao Cadastro do Hospital Softex ---
@@ -143,18 +174,20 @@ class Hospital {
         case 1:
           this.cadastrarPaciente();
           console.clear();
+          console.log("Paciente cadastrado com sucesso!");
+          this.pausarLimpar();
           break;
         case 2:
           this.buscarPaciente();
-          console.clear();
+          this.pausarLimpar();
           break;
         case 3:
           this.alterarPaciente();
-          console.clear();
+          // console.clear();
           break;
         case 4:
           this.removerPaciente();
-          console.clear();
+          // console.clear();
           break;
         case 5:
           this.listarPacientes();
