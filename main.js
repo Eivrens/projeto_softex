@@ -15,11 +15,30 @@ class Hospital {
     this.pacientes = [];
   }
 
+  maximo(txt, limite){
+    if(txt.length > limite){ 
+      console.error(`Maximo de caracteres exedidos (MIN: 0) (MAX: ${limite})`);
+      return true;
+    } else return false;
+  };
+
   cadastrarPaciente() {
-    const nome = readline.question("Digite o nome do paciente: ");
-    const cpf = readline.questionInt("Digite o CPF do paciente (somente números): ");
-    const idade = readline.questionInt("Digite a idade do paciente: ");
-    const consulta = readline.question("Digite o tipo da consulta: ");
+    let nome = "";
+    do nomeo= readline.question("Digite o nome do paciente: ")
+    while(maximo(nome, 50));
+
+    let cpf = "";
+    do cpf = readline.question("Digite o cpf do paciente: ")
+    while(maximo(cpf, 11));
+
+    let idade = "";
+    do idade = readline.question("Digite o nome do paciente: ")
+    while(maximo(idade, 3));
+
+    let consulta = "";
+    do consulta = readline.question("Digite o tipo de consulta: ");
+    while(this.maximo(consulta, 30))
+
 
     const paciente = new Paciente(nome, cpf, idade, consulta);
     this.pacientes.push(paciente);
