@@ -80,7 +80,7 @@ class Hospital {
         2. CPF
         3. Idade
         4. Consulta
-        5. Sair
+        5. Sair 
         `);
 
         const selecionarOpcao = readline.questionInt("Digite o número da opção que deseja alterar: ");
