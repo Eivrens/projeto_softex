@@ -23,5 +23,6 @@
   "bugs": {
     "url": "https://github.com/Eivrens/projeto_softex/issues"
   },
-  "homepage": "https://github.com/Eivrens/projeto_softex#readme"
+  "homepage": "https://github.com/Eivrens/projeto_softex#readme",
+  "devDependencies": {}
 }
