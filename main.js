@@ -24,6 +24,7 @@ class Hospital {
 
 
   cadastrarPaciente() {
+    console.clear();
     let nome = "";
     do nome= readline.question("Digite o nome do paciente: ")
     while(maximo(nome, 50));
@@ -40,15 +41,17 @@ class Hospital {
     do consulta = readline.question("Digite o tipo de consulta: ");
     while(maximo(consulta, 30))
 
-
     const paciente = new Paciente(nome, cpf, idade, consulta);
     this.pacientes.push(paciente);
-    console.log("Paciente cadastrado com sucesso!");
   }
 
   buscarPaciente() {
-    const buscarCpf = readline.questionInt("Digite o CPF do paciente que deseja buscar (somente números): ");
-    const pacienteEncontrado = this.pacientes.find((paciente) => paciente.cpf === buscarCpf);
+    const buscarCpf = readline.questionInt(
+      "Digite o CPF do paciente que deseja buscar (somente números): "
+    );
+    const pacienteEncontrado = this.pacientes.find(
+      (paciente) => paciente.cpf === buscarCpf
+    );
 
     if (pacienteEncontrado) {
       console.log(`-- Paciente Encontrado --
@@ -58,13 +61,19 @@ class Hospital {
       Consulta: ${pacienteEncontrado.consulta}
       `);
     } else {
+      console.clear();
       console.log("Paciente não encontrado");
     }
   }
 
   alterarPaciente() {
-    const buscarCpf = readline.questionInt("Digite o CPF do paciente que deseja alterar os dados (somente números): ");
-    const pacienteEncontrado = this.pacientes.find((paciente) => paciente.cpf === buscarCpf);
+    console.clear();
+    const buscarCpf = readline.questionInt(
+      "Digite o CPF do paciente que deseja alterar os dados (somente números): "
+    );
+    const pacienteEncontrado = this.pacientes.find(
+      (paciente) => paciente.cpf === buscarCpf
+    );
 
     if (pacienteEncontrado) {
       console.log(`-- Paciente Encontrado --
@@ -83,53 +92,83 @@ class Hospital {
         5. Sair
         `);
 
-        const selecionarOpcao = readline.questionInt("Digite o número da opção que deseja alterar: ");
+        const selecionarOpcao = readline.questionInt(
+          "Digite o número da opção que deseja alterar: "
+        );
+        console.clear();
         switch (selecionarOpcao) {
           case 1:
-            const novoNome = readline.question("Digite o novo nome do paciente: ");
+            const novoNome = readline.question(
+              "Digite o novo nome do paciente: "
+            );
             pacienteEncontrado.nome = novoNome;
-            console.log("Nome do paciente alterado com sucesso!");
+            console.clear();
+            console.log(`Nome do paciente alterado com sucesso! Novo nome: ${pacienteEncontrado.nome}`);
             break;
           case 2:
-            const novoCpf = readline.questionInt("Digite o novo CPF do paciente (somente números): ");
+            const novoCpf = readline.questionInt(
+              "Digite o novo CPF do paciente (somente números): "
+            );
             pacienteEncontrado.cpf = novoCpf;
-            console.log("CPF do paciente alterado com sucesso!");
+            console.clear();
+            console.log(`CPF do paciente alterado com sucesso! Novo CPF: ${pacienteEncontrado.cpf}`);
             break;
           case 3:
-            const novaIdade = readline.questionInt("Digite a nova idade do paciente: ");
+            const novaIdade = readline.questionInt(
+              "Digite a nova idade do paciente: "
+            );
             pacienteEncontrado.idade = novaIdade;
-            console.log("Idade do paciente alterada com sucesso!");
+            console.clear();
+            console.log(`Idade do paciente alterada com sucesso! Nova idade: ${pacienteEncontrado.idade}`);
             break;
           case 4:
-            const novaConsulta = readline.question("Digite a nova consulta do paciente: ");
+            const novaConsulta = readline.question(
+              "Digite a nova consulta do paciente: "
+            );
             pacienteEncontrado.consulta = novaConsulta;
-            console.log("Consulta do paciente alterada com sucesso!");
+            console.clear();
+            console.log(`Consulta do paciente alterada com sucesso! Nova consulta: ${pacienteEncontrado.consulta}`);
             break;
           case 5:
+            console.log("Alterações finalizadas...");
+            this.pausarLimpar();
             continuarAlterando = false;
             break;
           default:
             console.log("Opção inválida! Por favor, escolha uma opção válida.");
+            this.pausarLimpar();
         }
       }
     } else {
+      console.clear();
       console.log("Paciente não encontrado");
+      this.pausarLimpar();
     }
   }
 
   removerPaciente() {
-    const buscarCpf = readline.questionInt("Digite o CPF do paciente que deseja remover: (somente números) ");
-    const pacienteIndex = this.pacientes.findIndex((paciente) => paciente.cpf === buscarCpf);
+    console.clear();
+    const buscarCpf = readline.questionInt(
+      "Digite o CPF do paciente que deseja remover: "
+    );
+    const pacienteIndex = this.pacientes.findIndex(
+      (paciente) => paciente.cpf === buscarCpf
+    );
 
     if (pacienteIndex !== -1) {
       const pacienteRemovido = this.pacientes.splice(pacienteIndex, 1);
+      console.clear();
       console.log(`Paciente ${pacienteRemovido[0].nome} removido com sucesso!`);
+      this.pausarLimpar();
     } else {
+      console.clear();
       console.log("Paciente não encontrado");
+      this.pausarLimpar();
     }
   }
 
   listarPacientes() {
+    console.clear();
     if (this.pacientes.length > 0) {
       console.log("Lista de pacientes: ");
       this.pacientes.forEach((paciente) => {
@@ -143,6 +182,11 @@ class Hospital {
     } else {
       console.log("Não há pacientes cadastrados");
     }
+  }
+
+  pausarLimpar() {
+    readline.keyInPause();
+    console.clear();
   }
 
   iniciar() {
@@ -163,27 +207,31 @@ class Hospital {
         case 1:
           this.cadastrarPaciente();
           console.clear();
+          console.log("Paciente cadastrado com sucesso!");
+          this.pausarLimpar();
           break;
         case 2:
           this.buscarPaciente();
-          console.clear();
+          this.pausarLimpar();
           break;
         case 3:
           this.alterarPaciente();
-          console.clear();
           break;
         case 4:
           this.removerPaciente();
-          console.clear();
           break;
         case 5:
           this.listarPacientes();
+          this.pausarLimpar();
           break;
         case 6:
+          console.clear();
           console.log("Saindo do Cadastro de Hospital...");
           process.exit(0);
         default:
+          console.clear();
           console.log("Opção inválida! Por favor, escolha uma opção válida.");
+          this.pausarLimpar();
       }
     }
   }
