@@ -10,42 +10,26 @@ class Paciente {
   }
 }
 
-function maximo(txt, limite){
-  if(txt.length > limite || txt.length == 0){ 
-    console.error(`Maximo de caracteres exedidos (MIN: 0) (MAX: ${limite})`);
-    return true;
-  } else return false;
-};
-
 class Hospital {
   constructor() {
     this.pacientes = [];
   }
 
-
   cadastrarPaciente() {
     console.clear();
-    let nome = "";
-    do nome= readline.question("Digite o nome do paciente: ")
-    while(maximo(nome, 50));
-
-    let cpf = "";
-    do cpf = readline.question("Digite o cpf do paciente: ")
-    while(maximo(cpf, 11));
-
-    let idade = "";
-    do idade = readline.question("Digite a idade do paciente: ")
-    while(maximo(idade, 3));
-
-    let consulta = "";
-    do consulta = readline.question("Digite o tipo de consulta: ");
-    while(maximo(consulta, 30))
+    const nome = readline.question("Digite o nome do paciente: ");
+    const cpf = readline.questionInt(
+      "Digite o CPF do paciente (somente números): "
+    );
+    const idade = readline.questionInt("Digite a idade do paciente: ");
+    const consulta = readline.question("Digite o tipo da consulta: ");
 
     const paciente = new Paciente(nome, cpf, idade, consulta);
     this.pacientes.push(paciente);
   }
 
   buscarPaciente() {
+    console.clear();
     const buscarCpf = readline.questionInt(
       "Digite o CPF do paciente que deseja buscar (somente números): "
     );
