@@ -1,6 +1,10 @@
 import readline from 'readline-sync';
 import clear from 'clear';
 
+import { PrismaClient } from '@prisma/client';
+
+const db = new PrismaClient();
+
 class Paciente {
   constructor(nome, cpf, idade, consulta) {
     this.nome = nome;
@@ -12,10 +16,35 @@ class Paciente {
 
 function maximo(txt, limite){
   if(txt.length > limite || txt.length == 0){ 
-    console.error(`Maximo de caracteres exedidos (MIN: 0) (MAX: ${limite})`);
+    console.error(`Maximo de caracteres excedidos (MIN: 0) (MAX: ${limite})`);
     return true;
   } else return false;
 };
+
+function dateToDB(data) {
+  const dataArray = data.split("/", 3);
+  return `${dataArray[2]}-${dataArray[1]}-${dataArray[0]}`
+}
+
+function dateFromDB(data) {
+  const dataArray = data.split("-", 3);
+  const dataFormatada = `${dataArray[2]}/${dataArray[1]}/${dataArray[0]}`
+
+  //Calcular a idade:
+  const dataHoje = new Date();
+  const dataNasc = new Date(data);
+
+  const idade = dataHoje.getFullYear() - dataNasc.getFullYear();
+
+  const mesAtual = dataHoje.getMonth();
+  const mesNasc = dataNasc.getMonth();
+
+  if (mesNasc > mesAtual || (mesNasc === mesAtual && dataNasc.getDate() > hoje.getDate())) {
+    idade--;
+  }
+
+  return [dataFormatada, idade];
+}
 
 class Hospital {
   constructor() {
@@ -23,27 +52,38 @@ class Hospital {
   }
 
 
-  cadastrarPaciente() {
+  async cadastrarPaciente() {
     let nome = "";
     do nome= readline.question("Digite o nome do paciente: ")
     while(maximo(nome, 50));
 
     let cpf = "";
-    do cpf = readline.question("Digite o cpf do paciente: ")
+    do cpf = readline.question("Digite o CPF do paciente: ")
     while(maximo(cpf, 11));
 
-    let idade = "";
-    do idade = readline.question("Digite a idade do paciente: ")
-    while(maximo(idade, 3));
+    // let idade = "";
+    // do idade = readline.question("Digite a idade do paciente: ")
+    // while(maximo(idade, 3));
+
+    let dtNascimento = "";
+    do dtNascimento = readline.question("Digite sua data de nascimento (DD/MM/AAAA): ")
+    while(maximo(dtNascimento, 10));
 
     let consulta = "";
     do consulta = readline.question("Digite o tipo de consulta: ");
     while(maximo(consulta, 30))
 
+    // const paciente = new Paciente(nome, cpf, idade, consulta);
+    // this.pacientes.push(paciente);
+    // console.log("Paciente cadastrado com sucesso!");
 
-    const paciente = new Paciente(nome, cpf, idade, consulta);
-    this.pacientes.push(paciente);
-    console.log("Paciente cadastrado com sucesso!");
+    await db.paciente.create({
+      data: {
+        nome: nome,
+        cpf: cpf,
+        dt_nascimento: dateToDB(dtNascimento)
+      }
+    })
   }
 
   buscarPaciente() {
