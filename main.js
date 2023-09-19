@@ -2,51 +2,57 @@ import readline from 'readline-sync';
 import clear from 'clear';
 
 class Paciente {
-  constructor(nome, cpf, idade, consulta) {
+  constructor(nome, cpf, dtNascimento, consulta) {
     this.nome = nome;
     this.cpf = cpf;
-    this.idade = idade;
+    this.dtNascimento = dtNascimento;
     this.consulta = consulta;
   }
 }
 
-function maximo(txt, limite){
-  if(txt.length > limite || txt.length == 0){ 
-    console.error(`Maximo de caracteres exedidos (MIN: 0) (MAX: ${limite})`);
-    return true;
-  } else return false;
-};
+function dateFromDB(data) {
+
+  const dataArray = data.split('/');
+  const dia = parseInt(dataArray[0]);
+  const mes = parseInt(dataArray[1]);
+  const ano = parseInt(dataArray[2]);
+
+  const dataNasc = new Date(ano, mes - 1, dia);
+
+  const dataHoje = new Date();
+
+  let idade = dataHoje.getFullYear() - dataNasc.getFullYear();
+  const mesAtual = dataHoje.getMonth();
+  const mesNasc = dataNasc.getMonth();
+
+  if (mesNasc > mesAtual || (mesNasc === mesAtual && dataNasc.getDate() > dataHoje.getDate())) {
+    idade--;
+  }
+
+  return [data, idade];
+}
 
 class Hospital {
   constructor() {
     this.pacientes = [];
   }
 
-
   cadastrarPaciente() {
     console.clear();
-    let nome = "";
-    do nome= readline.question("Digite o nome do paciente: ")
-    while(maximo(nome, 50));
+    const nome = readline.question("Digite o nome do paciente: ");
+    const cpf = readline.question(
+      "Digite o CPF do paciente (somente números): "
+    );
+    const dtNascimento = readline.question("Digite a data de nascimento do paciente (DD/MM/YYYY): ");
+    const consulta = readline.question("Digite o tipo da consulta: ");
 
-    let cpf = "";
-    do cpf = readline.question("Digite o cpf do paciente: ")
-    while(maximo(cpf, 11));
-
-    let idade = "";
-    do idade = readline.question("Digite a idade do paciente: ")
-    while(maximo(idade, 3));
-
-    let consulta = "";
-    do consulta = readline.question("Digite o tipo de consulta: ");
-    while(maximo(consulta, 30))
-
-    const paciente = new Paciente(nome, cpf, idade, consulta);
+    const paciente = new Paciente(nome, cpf, dtNascimento, consulta);
     this.pacientes.push(paciente);
   }
 
   buscarPaciente() {
-    const buscarCpf = readline.questionInt(
+    console.clear();
+    const buscarCpf = readline.question(
       "Digite o CPF do paciente que deseja buscar (somente números): "
     );
     const pacienteEncontrado = this.pacientes.find(
@@ -57,7 +63,7 @@ class Hospital {
       console.log(`-- Paciente Encontrado --
       Nome: ${pacienteEncontrado.nome}
       CPF: ${pacienteEncontrado.cpf}
-      Idade: ${pacienteEncontrado.idade}
+      Idade: ${dateFromDB(pacienteEncontrado.dtNascimento)[1]} anos (${dateFromDB(pacienteEncontrado.dtNascimento)[0]})
       Consulta: ${pacienteEncontrado.consulta}
       `);
     } else {
@@ -68,7 +74,7 @@ class Hospital {
 
   alterarPaciente() {
     console.clear();
-    const buscarCpf = readline.questionInt(
+    const buscarCpf = readline.question(
       "Digite o CPF do paciente que deseja alterar os dados (somente números): "
     );
     const pacienteEncontrado = this.pacientes.find(
@@ -79,7 +85,7 @@ class Hospital {
       console.log(`-- Paciente Encontrado --
       Nome: ${pacienteEncontrado.nome}
       CPF: ${pacienteEncontrado.cpf}
-      Idade: ${pacienteEncontrado.idade}
+      Idade: ${dateFromDB(pacienteEncontrado.dtNascimento)[1]} anos (${dateFromDB(pacienteEncontrado.dtNascimento)[0]})
       Consulta: ${pacienteEncontrado.consulta}.
       `);
       let continuarAlterando = true;
@@ -87,7 +93,7 @@ class Hospital {
         console.log(`O que deseja alterar?
         1. Nome
         2. CPF
-        3. Idade
+        3. Data de Nascimento
         4. Consulta
         5. Sair
         `);
@@ -106,7 +112,7 @@ class Hospital {
             console.log(`Nome do paciente alterado com sucesso! Novo nome: ${pacienteEncontrado.nome}`);
             break;
           case 2:
-            const novoCpf = readline.questionInt(
+            const novoCpf = readline.question(
               "Digite o novo CPF do paciente (somente números): "
             );
             pacienteEncontrado.cpf = novoCpf;
@@ -114,12 +120,12 @@ class Hospital {
             console.log(`CPF do paciente alterado com sucesso! Novo CPF: ${pacienteEncontrado.cpf}`);
             break;
           case 3:
-            const novaIdade = readline.questionInt(
-              "Digite a nova idade do paciente: "
+            const novaDtNasc = readline.question(
+              "Digite a nova data de nascimento do paciente: "
             );
-            pacienteEncontrado.idade = novaIdade;
+            pacienteEncontrado.dtNascimento = novaDtNasc;
             console.clear();
-            console.log(`Idade do paciente alterada com sucesso! Nova idade: ${pacienteEncontrado.idade}`);
+            console.log(`Data de nascimento do paciente alterada com sucesso! Nova data: ${pacienteEncontrado.idade}`);
             break;
           case 4:
             const novaConsulta = readline.question(
@@ -148,7 +154,7 @@ class Hospital {
 
   removerPaciente() {
     console.clear();
-    const buscarCpf = readline.questionInt(
+    const buscarCpf = readline.question(
       "Digite o CPF do paciente que deseja remover: "
     );
     const pacienteIndex = this.pacientes.findIndex(
@@ -175,7 +181,7 @@ class Hospital {
         console.log(`
         Nome: ${paciente.nome}
         CPF: ${paciente.cpf}
-        Idade: ${paciente.idade}
+        Idade: ${dateFromDB(paciente.dtNascimento)[1]} anos (${dateFromDB(paciente.dtNascimento)[0]})
         Consulta: ${paciente.consulta}
         `);
       });
