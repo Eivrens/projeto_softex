@@ -12,7 +12,7 @@ class Paciente {
 
 function maximo(txt, limite){
   if(txt.length > limite || txt.length == 0){ 
-    console.error(`Maximo de caracteres exedidos (MIN: 0) (MAX: ${limite})`);
+    console.error(`Erro em quantidade de caracteres (MIN: 0) (MAX: ${limite})`);
     return true;
   } else return false;
 };
@@ -46,11 +46,12 @@ class Hospital {
   }
 
   buscarPaciente() {
+    console.clear();
     const buscarCpf = readline.questionInt(
       "Digite o CPF do paciente que deseja buscar (somente números): "
     );
     const pacienteEncontrado = this.pacientes.find(
-      (paciente) => paciente.cpf === buscarCpf
+      (paciente) => paciente.cpf == buscarCpf
     );
 
     if (pacienteEncontrado) {
@@ -72,7 +73,7 @@ class Hospital {
       "Digite o CPF do paciente que deseja alterar os dados (somente números): "
     );
     const pacienteEncontrado = this.pacientes.find(
-      (paciente) => paciente.cpf === buscarCpf
+      (paciente) => paciente.cpf == buscarCpf
     );
 
     if (pacienteEncontrado) {
@@ -152,7 +153,7 @@ class Hospital {
       "Digite o CPF do paciente que deseja remover: "
     );
     const pacienteIndex = this.pacientes.findIndex(
-      (paciente) => paciente.cpf === buscarCpf
+      (paciente) => paciente.cpf == buscarCpf
     );
 
     if (pacienteIndex !== -1) {
