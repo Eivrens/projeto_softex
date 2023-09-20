@@ -10,6 +10,32 @@ class Paciente {
   }
 }
 
+function apenasLetras(texto) {
+  const verificar = /^[a-zA-Z\s]+$/;
+  return verificar.test(texto);
+}
+
+function maxMin(txt, limiteMin, limiteMax){
+  if(txt.length < limiteMin || txt.length > limiteMax || txt.length === 0){ 
+    console.error(`Erro em quantidade de caracteres (MIN:${limiteMin} MAX: ${limiteMax})`);
+    return true;
+  } else return false;
+}
+
+function testeNumero(valor) {
+  return !isNaN(parseFloat(valor)) && isFinite(valor) && valor != 0; 
+}
+
+function maxMinCpf(txt, limiteMin, limiteMax){
+if(txt.length < limiteMin || txt.length > limiteMax){ 
+    console.error(`Erro em quantidade de caracteres (MIN:${limiteMin} MAX: ${limiteMax})`);
+    return true;
+  } else if(!testeNumero(txt)) {
+    console.error("Erro: O valor digitado não é um número ou é zero.");
+    return true;
+  } else return false;
+}
+
 function dateFromDB(data) {
 
   const dataArray = data.split('/');
@@ -39,12 +65,31 @@ class Hospital {
 
   cadastrarPaciente() {
     console.clear();
-    const nome = readline.question("Digite o nome do paciente: ");
-    const cpf = readline.question(
-      "Digite o CPF do paciente (somente números): "
-    );
-    const dtNascimento = readline.question("Digite a data de nascimento do paciente (DD/MM/YYYY): ");
-    const consulta = readline.question("Digite o tipo da consulta: ");
+    let nome = "";
+    do {
+      nome = readline.question("Digite o nome do paciente: ");
+      if(!apenasLetras(nome)) {
+        console.error("O nome deve conter apenas letras.");
+      }
+    }
+    while(maxMin(nome, 1, 50) || !apenasLetras(nome));
+
+    let cpf = "";
+    do cpf = readline.question("Digite o CPF,CNPJ ou Passaporte do paciente (somente números): ");
+    while(maxMinCpf(cpf, 10, 14));
+    
+    let dtNascimento = ""
+    do dtNascimento = readline.question("Digite a data de nascimento do paciente (DD/MM/YYYY): ");
+    while(maxMin(dtNascimento, 10, 10));
+
+    let consulta = "";
+    do {
+      consulta = readline.question("Digite o tipo da consulta: ");
+      if(!apenasLetras(consulta)) {
+        console.error("A consulta deve conter apenas letras.");
+      }
+    }
+    while(maxMin(consulta, 2, 50) || !apenasLetras(consulta));
 
     const paciente = new Paciente(nome, cpf, dtNascimento, consulta);
     this.pacientes.push(paciente);
@@ -56,7 +101,7 @@ class Hospital {
       "Digite o CPF do paciente que deseja buscar (somente números): "
     );
     const pacienteEncontrado = this.pacientes.find(
-      (paciente) => paciente.cpf === buscarCpf
+      (paciente) => paciente.cpf == buscarCpf
     );
 
     if (pacienteEncontrado) {
@@ -104,36 +149,50 @@ class Hospital {
         console.clear();
         switch (selecionarOpcao) {
           case 1:
-            const novoNome = readline.question(
-              "Digite o novo nome do paciente: "
-            );
+            let novoNome = "";
+            do {
+              novoNome = readline.question("Digite o nome do paciente: ");
+              if(!apenasLetras(novoNome)) {
+                console.error("O novo nome deve conter apenas letras.");
+              }
+            }
+            while(maxMin(novoNome, 1, 50) || !apenasLetras(novoNome)){
             pacienteEncontrado.nome = novoNome;
             console.clear();
             console.log(`Nome do paciente alterado com sucesso! Novo nome: ${pacienteEncontrado.nome}`);
+            }
             break;
           case 2:
-            const novoCpf = readline.question(
-              "Digite o novo CPF do paciente (somente números): "
-            );
+            let novoCpf = "";
+            do novoCpf = readline.question("Digite o novo CPF do paciente (somente números): ");
+            while(maxMinCpf(novoCpf, 10, 14)){
             pacienteEncontrado.cpf = novoCpf;
             console.clear();
             console.log(`CPF do paciente alterado com sucesso! Novo CPF: ${pacienteEncontrado.cpf}`);
+            }
             break;
           case 3:
-            const novaDtNasc = readline.question(
-              "Digite a nova data de nascimento do paciente: "
-            );
+            let novaDtNasc = "";
+            do novaDtNasc = readline.question("Digite a nova data de nascimento do paciente: ");
+            while(maxMin(dtNascimento, 10, 10)){
             pacienteEncontrado.dtNascimento = novaDtNasc;
             console.clear();
             console.log(`Data de nascimento do paciente alterada com sucesso! Nova data: ${pacienteEncontrado.idade}`);
+            }
             break;
           case 4:
-            const novaConsulta = readline.question(
-              "Digite a nova consulta do paciente: "
-            );
+            let novaConsulta = "";
+            do {
+              novaConsulta = readline.question("Digite a nova consulta do paciente: ");
+              if(!apenasLetras(novaConsulta)) {
+                console.error("A nova consulta deve conter apenas letras.");
+              }
+            }
+            while(maxMin(novaConsulta, 2, 50) || !apenasLetras(novaConsulta)){
             pacienteEncontrado.consulta = novaConsulta;
             console.clear();
             console.log(`Consulta do paciente alterada com sucesso! Nova consulta: ${pacienteEncontrado.consulta}`);
+            }
             break;
           case 5:
             console.log("Alterações finalizadas...");
