@@ -1,0 +1,42 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:../database/hospital.db"
+}
+
+// Models/Tabelas:
+
+model Paciente {
+  id            String           @id @default(uuid())
+  nome          String
+  cpf           String        @unique
+  dt_nascimento DateTime
+  telefone      String
+  email         String?       @unique
+  tp_sanguineo  String?
+  alergias      String?
+  agendamentos  Agendamento[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("pacientes")
+}
+
+model Agendamento {
+  id             String       @id @default(uuid())
+  id_paciente    String
+  paciente       Paciente? @relation(fields: [id_paciente], references: [id])
+  procedimento   String
+  medico         String
+  dt_agendamento DateTime
+  status         String    @default("agendado")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("agendamentos")
+}
