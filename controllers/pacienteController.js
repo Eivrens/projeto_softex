@@ -119,9 +119,11 @@ async function buscarPaciente() {
             cpf: buscaCpf
         }
     });
-    if (pacienteDB != undefined) {
-        return pacienteDB;
 
+    if (pacienteDB != undefined) {
+
+        return pacienteDB;
+        
     } else {
         util.printVermelho(`--- Paciente NÃO encontrado ---`)
         console.log(`O que deseja fazer?
@@ -136,7 +138,7 @@ async function buscarPaciente() {
         } else {
             await pacienteView.mainPaciente();
         }
-        
+
 
     }
 
@@ -230,11 +232,11 @@ async function deletarPaciente() {
 
     if (deletePaciente != undefined) {
         util.printAmarelo(`Paciente encontrado:
-        PACIENTE: ${deletarPaciente.nome}
+        PACIENTE: ${deletePaciente.nome}
         CPF: ${deletePaciente.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')}
         --------------------------------------
         `);
-        const confirmDelete = rl.question(`Certeza que deseja deletar o cadastro de ${deletePaciente.nome} [S/N]?`);
+        const confirmDelete = rl.question(`Certeza que deseja deletar o cadastro de ${deletePaciente.nome} [S/N]? `);
 
         if (confirmDelete) {
             await db.paciente.delete({
