@@ -41,7 +41,7 @@ if(txt.length < limiteMin || txt.length > limiteMax){
 
 function dateFromDB(data) {
 
-  const dataArray = data.split('/');
+  const dataArray = data.split('-', 3);
   const dia = parseInt(dataArray[0]);
   const mes = parseInt(dataArray[1]);
   const ano = parseInt(dataArray[2]);
