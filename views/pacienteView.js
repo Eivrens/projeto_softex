@@ -39,16 +39,18 @@ async function mainPaciente() {
             break;
         case 3:
             await pacienteController.editarPaciente();
-           
+
             break;
         case 4:
-
+            await pacienteController.deletarPaciente();
             break;
         case 5:
-
+            await pacienteController.listarPacientes();
+            rl.keyInPause();
+            mainPaciente();
             break;
         case 6:
-            index.menuInicial();
+            await mainPaciente()
             break;
         default:
             break;

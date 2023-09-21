@@ -44,8 +44,8 @@ async function cadastrarPaciente() {
 
     //CPF:
     let cpf = "";
-    do cpf = rl.question("Digite o CPF,CNPJ ou Passaporte do paciente (somente numeros): ");
-    while (validate.maxMinCpf(cpf, 10, 14));
+    do cpf = rl.question("Digite o CPF ou Passaporte do paciente (somente numeros): ");
+    while (validate.maxMinCpf(cpf, 10, 11));
 
     //Data de Nascimento:
     let dtNascimento = "";
@@ -67,11 +67,21 @@ async function cadastrarPaciente() {
 
     //Alergias:
     let alergia = rl.question("Possui alguma alergia [S/N]? ");
+
+    const alergiaArray = [];
+
     if (alergia.toUpperCase() == "S") {
-        await cadastrarAlergias()
+        do {
+            let tipoAlergia = rl.question("Informe a alergia (Substancia, medicamento, alimentares e afins: ");
+
+            alergiaArray.push(tipoAlergia);
+
+            alergia = rl.question("Possui mais alguma alergia [S/N]? ");
+
+        } while (alergia.toUpperCase() == "S");
     }
 
-    const paciente = new Paciente(nome, cpf, dtNascimento, telefone, email, tpSanguineo.toUpperCase(), cadastrarAlergias.toString());
+    const paciente = new Paciente(nome, cpf, dtNascimento, telefone, email, tpSanguineo.toUpperCase(), alergiaArray.toString());
 
     await db.paciente.create({
         data: {
@@ -86,13 +96,14 @@ async function cadastrarPaciente() {
     });
 
     util.printVerde(`Paciente ${paciente.nome} cadastrado com sucesso!`);
+    rl.keyInPause();
 
-    let contAgendamento = rl.question("Deseja realizar agendamento de consulta/exame [S/N]? ");
-    do {
-        if (contAgendamento.toUpperCase == "S") {
-            await agendamentoController.realizarAgendamento(paciente);
-        }
-    } while (contAgendamento.toUpperCase != "N")
+    // let contAgendamento = rl.question("Deseja realizar agendamento de consulta/exame [S/N]? ");
+
+    // if (contAgendamento.toUpperCase == "S") {
+    //     await agendamentoController.realizarAgendamento(paciente);
+    // }
+    await pacienteView.mainPaciente();
 
 }
 
@@ -125,6 +136,7 @@ async function buscarPaciente() {
         } else {
             await pacienteView.mainPaciente();
         }
+        
 
     }
 
@@ -166,6 +178,8 @@ async function editarPaciente() {
                         nome: novoNome
                     }
                 });
+                util.printVerde("Nome alterado com sucesso!");
+                await pacienteView.mainPaciente();
                 break;
             case 2:
                 let novoTelefone = rl.question("Digite o novo telefone: ");
@@ -177,6 +191,8 @@ async function editarPaciente() {
                         telefone: novoTelefone
                     }
                 });
+                util.printVerde("Telefone alterado com sucesso!");
+                await pacienteView.mainPaciente()
                 break;
             case 3:
                 let novoEmail = rl.question("Digite o novo email: ");
@@ -188,6 +204,8 @@ async function editarPaciente() {
                         email: novoEmail
                     }
                 });
+                util.printVerde("Email alterado com sucesso!");
+                await pacienteView.mainPaciente()
             default:
                 await pacienteView.mainPaciente();
                 break;
@@ -200,8 +218,45 @@ async function editarPaciente() {
 
 }
 
+async function deletarPaciente() {
+
+    const buscaCpf = rl.question("Digite o CPF do paciente que deseja editar: ");
+
+    const deletePaciente = await db.paciente.findUnique({
+        where: {
+            cpf: buscaCpf
+        }
+    });
+
+    if (deletePaciente != undefined) {
+        util.printAmarelo(`Paciente encontrado:
+        PACIENTE: ${deletarPaciente.nome}
+        CPF: ${deletePaciente.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')}
+        --------------------------------------
+        `);
+        const confirmDelete = rl.question(`Certeza que deseja deletar o cadastro de ${deletePaciente.nome} [S/N]?`);
+
+        if (confirmDelete) {
+            await db.paciente.delete({
+                where: {
+                    cpf: buscaCpf
+                }
+            });
+            util.printVerde(`Cadastro de ${deletePaciente.nome} removido com sucesso!`);
+            await pacienteView.mainPaciente();
+        }
+    }
+}
+
+async function listarPacientes() {
+    const listaPacientes = await db.paciente.findMany();
+    console.table(listaPacientes);
+}
+
 export default {
     cadastrarPaciente,
     buscarPaciente,
-    editarPaciente
+    editarPaciente,
+    deletarPaciente,
+    listarPacientes
 }

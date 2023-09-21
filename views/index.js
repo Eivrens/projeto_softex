@@ -2,6 +2,8 @@
 import util from '../controllers/utils.js';
 
 function menuInicial() {
+    console.clear();
+    
     util.printAmarelo(`--- Bem-vindo ao Hospital Softex ---
       Escolha uma opção:
       1. Agendamento de Consultas/Exames
