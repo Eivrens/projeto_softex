@@ -26,7 +26,7 @@ async function mainAgendamento() {
             await agendamentoController.realizarAgendamento(paciente);
             break;
         case 2:
-
+            
             break;
         case 3:
 

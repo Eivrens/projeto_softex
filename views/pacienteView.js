@@ -39,10 +39,11 @@ async function mainPaciente() {
             break;
         case 3:
             await pacienteController.editarPaciente();
-
+            rl.keyInPause();
             break;
         case 4:
             await pacienteController.deletarPaciente();
+            rl.keyInPause();
             break;
         case 5:
             await pacienteController.listarPacientes();
@@ -53,6 +54,8 @@ async function mainPaciente() {
             await mainPaciente()
             break;
         default:
+            console.log("Digite uma opção válida!");
+            mainPaciente();
             break;
     }
 }
